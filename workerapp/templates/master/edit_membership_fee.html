@@ -1,0 +1,36 @@
+{% extends 'master/index.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="h3 mb-3 border-bottom py-2">Services</div>
+<div class="row">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success">{{message}}</div>       
+  {% endfor %}
+{% endif %}
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-body">
+          <!-- <h4 class="card-title">Default form</h4> -->
+          <p class="card-description">
+           Enter Service details
+          </p>
+          <form class="forms-sample" method="post" action="/update_membership_fee/">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="hidden" name="mf_id" value="{{data.mf_id}}" id="">
+              <label for="membership_fee">Membership fee</label>
+              <input type="number" class="form-control" value="{{data.membership_fee}}" required name="membership_fee" id="membership_fee" placeholder="Membership fee">
+            </div>
+            
+            <button type="submit" class="btn btn-primary me-2">Submit</button>
+            
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock content %}

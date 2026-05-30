@@ -1,0 +1,44 @@
+{% extends 'master/index.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="h3 mb-3 border-bottom py-2">Edit service</div>
+<div class="row">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success">{{message}}</div>       
+  {% endfor %}
+{% endif %}
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-body">
+          <!-- <h4 class="card-title">Default form</h4> -->
+          <p class="card-description">
+           Edit Service details
+          </p>
+          <form class="forms-sample" method="post" enctype="multipart/form-data" action="/update_service/">
+            {% csrf_token %}
+            <input type="hidden" name="s_id" value="{{data.s_id}}" id="">
+            <div class="form-group">
+              <label for="service_name">Service name</label>
+              <input type="text" class="form-control" required value="{{data.service_name}}" name="service_name" id="service_name" placeholder="Service name">
+            </div>
+            <div class="form-group">
+              <label for="">Description</label>
+              <textarea name="description" required class="form-control form-control-lg" placeholder="Description">{{data.description}}</textarea>
+            </div>
+            <div class="form-group">
+              <label for="image">Image</label>
+              <input type="file" class="form-control" name="image" id="image">
+              <img src="{{data.image}}" height="90" width="100" alt="">
+            </div>
+            <button type="submit" class="btn btn-primary me-2">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+   
+  </div>
+
+{% endblock content %}

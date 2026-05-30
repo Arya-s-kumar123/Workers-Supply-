@@ -1,0 +1,197 @@
+{% extends 'worker/index.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="h3 mb-3 border-bottom py-2">Profile</div>
+    <div class="row">
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-success">{{message}}</div>       
+      {% endfor %}
+    {% endif %}
+        <div class="col-md-8 m-auto">
+          <div class="card">
+            <div class="card-body">
+             
+                <form class="forms-sample" action="/profile/" id="myform" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                          <label for="">Full name</label> 
+                          <input type="text" name="name" value="{{data.name}}" required class="form-control" placeholder="Full Name ...">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label for="">Contact number</label>
+                          <input type="text" class="form-control" name="contact_number" required value="{{data.contact_number}}"  placeholder="Contact number">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label for="">Email</label>
+                          <input type="email" class="form-control" name="email" value="{{data.email}}" required placeholder="Email">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label for="">Image</label>
+                          <input type="file" class="form-control" name="image" >
+                          <img src="{{data.image}}" height="80" width="90" alt="">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group">
+                            <label for="State">State</label>
+                            <select class="form-control form-control-sm" required name="state_id" id="State">
+                              {% if state %} 
+                                {% for i in state %}
+                                <option value="{{i.state_id}}" {% if i.state_id == data.district.state.state_id %} selected {% endif %}>{{i.state}}</option>
+                                {% endfor %}
+                              {% endif %}
+                            </select>
+                        </div>
+                      </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="district">District</label>
+                            <select class="form-control form-control-sm" id="district" name="district_id">
+                              <option value="{{data.district.district_id}}">{{data.district.district}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                          <label for="">Place</label>
+                          <input type="text" class="form-control" name="place" required value="{{data.place}}"  placeholder="Place">
+                        </div>
+                      </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                        <label for="">Address</label>
+                        <textarea name="address" class="form-control form-control-lg" required placeholder="Address">{{data.address}}</textarea>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                        <label for="work_experience" class="form-label">Your work experience</label>
+                        <select class="form-control" required name="work_experience" id="work_experience">
+                            <option {% if '0-1' == data.work_experience %} selected {% endif %} value="0-1">0-1</option>
+                            <option {% if '1-2' == data.work_experience %} selected {% endif %} value="1-2">1-2</option>
+                            <option {% if '2-4' == data.work_experience %} selected {% endif %} value="2-4">2-4</option>
+                            <option {% if 'Above 4' == data.work_experience %} selected {% endif %} value="Above 4">Above 4</option>
+                          </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                        <label for="service_id" class="form-label">Service</label>
+                        <select class="form-control" required name="service_id" id="service_id">
+                            {% if data2 %} 
+                              {% for i in data2 %}
+                              <option value="{{i.s_id}}" {% if i.s_id == data.service_id %} selected {% endif %}>{{i.service_name}}</option>
+                              {% endfor %}
+                            {% endif %}
+                          </select>
+                        </div>
+                    </div>
+                    {% if data.student == 'Yes' %}
+                    <div class="col-6">
+                      <div class="form-group">
+                      <label for="student" class="form-label">Are you a student</label>
+                        <select class="form-control" required name="student" id="student">
+                            <option value="">--Select--</option>
+                            <option {% if 'Yes' == data.work_experience %} selected {% endif %}  value="Yes">Yes</option>
+                            <option {% if 'No' == data.work_experience %} selected {% endif %}  value="No">No</option>
+                        </select>
+                      </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label for="work_time" class="form-label">Work time</label>
+                      <input type="text" class="form-control" name="work_time" rows="2" required>
+                    </div>
+                  </div>
+                  {% endif %}
+                </div>  
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                <a href="/change_password" class="float-end">Change password ?</a>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script src="{% static 'Validation/jquery-1.11.1.min.js' %}"></script>
+      <script src="{% static 'Validation/jquery_validate.js' %}"></script>
+      <script src="{% static 'Validation/additional_validate.js' %}"></script>
+      
+      <script>
+          (function ($, W, D)
+          {
+          var JQUERY4U = {};
+          JQUERY4U.UTIL =
+          {
+          setupFormValidation: function ()
+          {
+          $.validator.addMethod(
+          "regex",
+          function(value, element, regexp) {
+          var check = false;
+          return this.optional(element) || regexp.test(value);
+          },
+          "Not a valid Input."
+          );
+          
+          //form validation rules
+          $("#myform").validate({
+          ignore: [],
+          rules: {
+                      
+              name: {
+                            required: true,
+                            regex : /^[A-Za-z ]+$/,
+                            minlength: 3,
+              
+                          },
+                         
+                          contact_number: {
+                              required: true,
+                              digits:true,
+                                 minlength: 10,
+                                 maxlength: 10,
+                                 regex : /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/
+                          },
+      
+                         
+              
+                          email: {
+                           required: true,
+                           regex :  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+              
+                          },
+                          
+                     
+                     
+                      
+                    },
+                    messages: {
+          
+                      contact_number: "Please Enter Valid 10 digit Phone Number - Starting from 6, 7 or 8 or 9",
+          },
+          submitHandler: function (form) {
+          form.submit();
+          }
+          });
+          }
+          }
+          //when the dom has loaded setup form validation rules
+          $(D).ready(function ($) {
+          JQUERY4U.UTIL.setupFormValidation();
+          });
+          })(jQuery, window, document);
+          </script>      
+
+        {% endblock content %}

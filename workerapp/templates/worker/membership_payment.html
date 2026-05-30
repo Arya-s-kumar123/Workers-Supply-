@@ -1,0 +1,178 @@
+{% extends 'worker/index.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="h3 mb-3 border-bottom py-2">Membership</div>
+    <div class="row">
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-success">{{message}}</div>       
+      {% endfor %}
+    {% endif %}
+        <div class="col-md-6 m-auto">
+          <div class="card">
+            <div class="card-body">
+             
+                <form class="forms-sample" action="/membership_payment/" id="myform" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                          <label for="">Membership fee</label> 
+                          <input type="text" name="amount" value="{{amount}}" required class="form-control" readonly>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="form-group">
+                          <label for="">Card Number</label>
+                          <input type="text" class="form-control" id="cno" name="cno" required>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="form-group">
+                          <label for="">Cvv</label>
+                          <input type="text" class="form-control" id="cvv" name="cvv" required>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="form-group">
+                            <label class="">Card Expire Date</label>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group">
+                            <select name="mon" class="form-control bg-white" required id="emon">
+                                <option value="">--Select Month--</option>
+                            </select>
+                        </div>
+                     </div>
+                     <div class="col-6">
+                        <div class="form-group">
+                            <select name="" class="form-control bg-white" required id="eyear">
+                                <option value="">--Select Year--</option>
+                            </select>
+                        </div>
+                     </div>
+                    
+                </div>  
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+<script src="{% static 'Validation/jquery-1.11.1.min.js' %}"></script>
+<script src="{% static 'Validation/jquery_validate.js' %}"></script>
+<script src="{% static 'Validation/additional_validate.js' %}"></script>
+   
+   
+   <script>
+       drop = document.getElementById("eyear");
+       var year = new Date().getFullYear();
+       for (var i=0;i<15;i++){{
+       var opt = document.createElement("option");
+       opt.text = year;
+       drop.add(opt);
+       year++
+       }}
+       drop2 = document.getElementById("emon");
+       for (var i=1;i<=12;i++){{
+           var mno = i.toString().padStart(2, "0");
+           var option = document.createElement("option");
+           option.text = mno;
+           drop2.add(option);
+       }}
+       </script>
+   
+   
+   <script>
+       (function ($, W, D)
+       {
+       var JQUERY4U = {};
+       JQUERY4U.UTIL =
+       {
+       setupFormValidation: function ()
+       {
+       $.validator.addMethod(
+       "regex",
+       function(value, element, regexp) {
+       var check = false;
+       return this.optional(element) || regexp.test(value);
+       },
+       "Not a valid Input."
+       );
+       $.validator.addMethod("validMonth", function(value, element) {
+           var currentDate = new Date();
+           var currentYear = currentDate.getFullYear();
+           var currentMonth = currentDate.getMonth() + 1; // Adding 1 because JavaScript months are 0-based
+       
+           var selectedYear = $("#eyear").val();
+           var selectedMonth = $("#emon").val();
+       
+           if (selectedYear > currentYear) {
+               return true; // Future year, no error
+           } else if (selectedYear == currentYear && selectedMonth >= currentMonth) {
+               return true; // Current year or future month in current year, no error
+           } else {
+               return false; // Past year or past month in current year, show error
+           }
+       }, "Card Month is Passed You Can't Pay");
+       
+       $.validator.addMethod("compareValues", function(value, element, params) {
+               var stock = parseInt($("#stock").val());
+               var quantity = parseInt($("#quantity").val());
+               return stock >= quantity && quantity > 0;
+           }, "Enter valid quantity and less than or equal to stock");
+       
+       //form validation rules
+       $("#myform").validate({
+       ignore: [],
+       rules: {
+           
+               cno: {
+                   required: true,
+                    regex : /^[0-9]+$/,
+                    minlength: 16,
+                   maxlength: 16,
+       
+               },
+               cvv: {
+                   required: true,
+                    regex : /^[0-9]+$/,
+                    minlength: 3,
+                   maxlength: 3,
+       
+               },
+               mon:{
+                   required: true,
+                   validMonth: true,
+               },
+               quantity: {
+                   required: true,
+                   compareValues: true,
+               }
+             },
+             messages: {
+       
+               cno: "Please Enter Valid 16 digit Card Number",
+               
+               cvv: "Please Enter 3 digt Cvv",
+               
+       },
+       submitHandler: function (form) {
+       form.submit();
+       }
+       });
+       }
+       }
+       //when the dom has loaded setup form validation rules
+       $(D).ready(function ($) {
+       JQUERY4U.UTIL.setupFormValidation();
+       });
+       })(jQuery, window, document);
+       </script>   
+
+        {% endblock content %}

@@ -1,0 +1,63 @@
+{% extends 'worker/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="h3 mb-3 border-bottom py-2">New work</div>
+<div class="row">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success">{{message}}</div>       
+  {% endfor %}
+{% endif %}
+    {% if data %}
+    <div class="col-md-12">
+        
+        <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Service</th>
+                <th>Service request details</th>
+                <th>Location</th>
+                <th>User details</th>
+                <th>Details</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in data %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.service_request.service.service_name}}</td>
+                <td>
+                    <b>{{i.service_request.title}}</b> <br>
+                    {{i.service_request.description}}
+                </td>
+                <td>
+                    State : {{i.service_request.district.state.state}} <br>
+                    District : {{i.service_request.district.district}} <br>
+                    Palce : {{i.service_request.place}} 
+                    
+                </td>
+                <td>
+                    Name : {{i.service_request.user.name}} <br>
+                    Email : {{i.service_request.user.email}} <br>
+                    Contact number : {{i.service_request.user.contact_number}} <br>
+                    Address : {{i.service_request.user.address}}
+                </td>
+                <td><a href="/work_details?sr_id={{i.service_request.sr_id}}" class="btn btn-sm btn-info">Details</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+            
+    </div>
+    {% else %}
+    <div class="col-md-12">
+      <h5>Not found any pending work</h5>
+    </div>
+    {% endif %}
+  </div>
+     
+{% endblock content %}

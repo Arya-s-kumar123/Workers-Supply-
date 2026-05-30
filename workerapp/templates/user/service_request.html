@@ -1,0 +1,224 @@
+{% extends 'user/index.html' %}
+{% block content %}
+{% load static %}
+
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Service request</h2>
+          <ol>
+            <li><a href="/home">Home</a></li>
+            <li>Service request</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Contact Section ======= -->
+    <section id="blog" class="blog">
+        <div class="container" data-aos="fade-up">
+            <h3>Service request</h3>
+          <div class="row">
+            {% if messages %}
+            {% for message in messages %}
+            <h6 class="alert alert-success">{{message}}</h6>       
+            {% endfor %}
+        {% endif %}
+            <div class="col-lg-6 entries">
+                
+              <article class="entry">
+  
+                <div class="entry-img">
+                  <img src="{{data.image}}" alt="" class="img-fluid">
+                </div>
+  
+                <h2 class="entry-title">
+                  <a href="blog-single.html">{{data.service_name}}</a>
+                </h2>
+  
+                <div class="entry-content">
+                  <p>
+                    {{data.description}}
+                  </p>
+                  <div class="read-more">
+                    <!-- <a href="blog-single.html">Read More</a> -->
+                  </div>
+                </div>
+  
+              </article><!-- End blog entry -->
+  
+            </div><!-- End blog entries list -->
+            <div class="col-lg-6">
+                <form method="post" acction="/service_request/" id="myform">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-md-12 form-group mt-3 mt-md-0">
+                        <input type="hidden" value="{{data.s_id}}" name="service_id">
+                        <label for="State" class="form-label">State</label>
+                        <select class="form-control" required name="state_id" id="State">
+                            <option value="">--Select--</option>
+                            {% if state %} 
+                              {% for i in state %}
+                              <option value="{{i.state_id}}">{{i.state}}</option>
+                              {% endfor %}
+                            {% endif %}
+                          </select>
+                    </div>
+                    <div class="col-md-12 form-group mt-3 mt-md-0">
+                        <label for="district" class="form-label">District</label>
+                        <select class="form-control" required id="district" name="district_id">
+                            <option value="">--Select--</option>
+                          </select>
+                    </div>
+                    <div class="col-md-12 form-group mt-3 mt-md-0">
+                        <label for="Place" class="form-label">Place</label>
+                      <input type="text" class="form-control" name="place" id="Place" required>
+                    </div>
+                    <div class="col-md-12 form-group mt-3 mt-md-0">
+                        <label for="title" class="form-label">Title</label>
+                      <input type="text" class="form-control" name="title" id="title" required>
+                    </div>
+                    <div class="col-md-12 form-group mt-3 mt-md-0">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" name="description" rows="2" placeholder="description" required></textarea>
+                    </div>
+                  </div>
+                  <div class="mt-2"><button type="submit" class="btn btn-success">Send</button></div>
+                </form>
+              </div>
+          </div>
+  
+        </div>
+      </section>
+  </main><!-- End #main -->
+
+
+  <script src="{% static 'Validation/jquery-1.11.1.min.js' %}"></script>
+<script src="{% static 'Validation/jquery_validate.js' %}"></script>
+<script src="{% static 'Validation/additional_validate.js' %}"></script>
+
+<script>
+    (function ($, W, D)
+    {
+    var JQUERY4U = {};
+    JQUERY4U.UTIL =
+    {
+    setupFormValidation: function ()
+    {
+    $.validator.addMethod(
+    "regex",
+    function(value, element, regexp) {
+    var check = false;
+    return this.optional(element) || regexp.test(value);
+    },
+    "Not a valid Input."
+    );
+    
+    //form validation rules
+    $("#myform").validate({
+    ignore: [],
+    rules: {
+                
+        name: {
+                      required: true,
+                      regex : /^[A-Za-z ]+$/,
+                      minlength: 3,
+        
+                    },
+                   
+                    contact_number: {
+                        required: true,
+                        digits:true,
+                           minlength: 10,
+                           maxlength: 10,
+                           regex : /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/
+                    },
+
+                   
+        
+                    email: {
+                     required: true,
+                     regex :  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        
+                    },
+                    username: {
+                        required: true,
+                        regex : /^[A-Za-z0-9@]+$/,
+                        minlength: 5,
+                        maxlength: 15,
+        
+                    },
+                    password: {
+                        required: true,
+                         regex : /^[A-Za-z0-9@#*]+$/,
+                         minlength: 5,
+                        maxlength: 15,
+        
+                    },
+                    cpas: {
+                        required: true,
+                           regex : /^[A-Za-z0-9@#*]+$/,
+                           minlength: 5,
+                          maxlength: 15,
+                      equalTo: "#password"
+        
+                    },
+                
+               
+               
+                
+              },
+              messages: {
+    
+                phone: "Please Enter Valid 10 digit Phone Number - Starting from 6, 7 or 8 or 9",
+                username: "Please Enter Valid User Name(5-15 digit alphanumeric username",
+                password: "Please Enter Valid Password Name(5-15 digit alphanumeric  password  and @#* also allowed",
+                cpas: "Please Enter Valid Password Name(5-15 digit alphanumeric confirm password and same as password and @#* also allowed",
+                uname:"User name is not available",
+    },
+    submitHandler: function (form) {
+    form.submit();
+    }
+    });
+    }
+    }
+    //when the dom has loaded setup form validation rules
+    $(D).ready(function ($) {
+    JQUERY4U.UTIL.setupFormValidation();
+    });
+    })(jQuery, window, document);
+    </script>
+
+<script>
+    $(document).ready(function(){
+        $("#State").change(function(){
+        var state_id = $(this).val();
+
+$.ajax({
+
+    url: '/display_district/',
+    data: {
+        'state_id': state_id
+    },
+    dataType: 'json',
+    success: function (data) {
+
+
+        let html_data = '<option value="">--Select--</option>';
+data.forEach(function (data) {
+html_data += `<option value="${data.district_id}">${data.district}</option>`
+});
+$("#district").html(html_data);
+
+    }
+});
+
+        });
+    });
+    </script> 
+{% endblock content %}

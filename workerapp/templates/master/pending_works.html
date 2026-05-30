@@ -1,0 +1,63 @@
+{% extends 'master/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="h3 mb-3 border-bottom py-2">Pending works</div>
+<div class="row">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success">{{message}}</div>       
+  {% endfor %}
+{% endif %}
+    {% if data %}
+    <div class="col-md-12">
+        
+        <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Service</th>
+                <th>Service request details</th>
+                <th>Location</th>
+                <th>User details</th>
+                <th>Worker</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in data %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.service.service_name}}</td>
+                <td>
+                    <b>{{i.title}}</b> <br>
+                    {{i.description}}
+                </td>
+                <td>
+                    State : {{i.district.state.state}} <br>
+                    District : {{i.district.district}} <br>
+                    Palce : {{i.place}} 
+                    
+                </td>
+                <td>
+                    Name : {{i.user.name}} <br>
+                    Email : {{i.user.email}} <br>
+                    Contact number : {{i.user.contact_number}} <br>
+                    Address : {{i.user.address}}
+                </td>
+                <td><a href="/work_details?sr_id={{i.sr_id}}" class="btn btn-sm btn-info">Details</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+            
+    </div>
+    {% else %}
+    <div class="col-md-12">
+      <h5>Not found any pending work</h5>
+    </div>
+    {% endif %}
+  </div>
+     
+{% endblock content %}

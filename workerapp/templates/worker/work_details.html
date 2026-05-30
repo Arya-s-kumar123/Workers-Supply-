@@ -1,0 +1,164 @@
+{% extends 'worker/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="h3 mb-3 border-bottom py-2">Work details</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="home-tab">
+          <div class="tab-content tab-content-basic">
+            <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
+              <div class="row">
+                <div class="col-lg-12 d-flex flex-column">
+                  <div class="row flex-grow">
+                    <div class="col-md-4 col-lg-4 grid-margin">
+                      <div class="card card-rounded">
+                        <div class="card-body card-rounded">
+                          <h4 class="card-title  card-title-dash">Service request</h4>
+                          <div class="list align-items-center border-bottom py-2">
+                            <div class="wrapper w-100">
+                              <p class="mb-2 font-weight-medium">
+                                Request date
+                              </p>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="mdi mdi-calendar text-muted me-1"></i>
+                                  <p class="mb-0 text-small text-muted">{{data.requested_date}}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="list align-items-center border-bottom py-2">
+                            <div class="wrapper w-100">
+                              <p class="mb-2 font-weight-medium">
+                               Service
+                              </p>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="ti-settings text-muted me-1"></i>
+                                  <p class="mb-0 text-small text-muted badge badge-opacity-success px-4">{{data.service.service_name}}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="list align-items-center border-bottom py-2">
+                            <div class="wrapper w-100">
+                              <p class="mb-2 font-weight-medium">
+                                User details
+                              </p>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="mdi mdi-account text-muted me-1"></i>
+                                  <p class="mb-0 text-small text-muted">{{data.user.name}} | {{data.user.email}} | {{data.user.contact_number}}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="list align-items-center border-bottom py-2">
+                            <div class="wrapper w-100">
+                              <p class="mb-2 font-weight-medium">
+                                Location
+                              </p>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="mdi mdi-calendar text-muted me-1"></i>
+                                  <p class="mb-0 text-small text-muted">{{data.district.state.state}} - <b class="badge badge-opacity-danger">{{data.district.district}}</b> - <b class="badge badge-opacity-warning">{{data.place}}</b></p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="list align-items-center border-bottom py-2">
+                            <div class="wrapper w-100">
+                              <p class="mb-2 font-weight-medium">
+                                Request
+                              </p>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <p class="mb-0 text-small text-muted"><b>{{data.title}}</b> <br> {{data.description}}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-8 grid-margin">
+                      <div class="row">
+                        {% if data3.status != 'Completed' %}
+                        <div class="col-12 mb-2">
+                          <div class="card">
+                            <div class="card-body">
+                              <h4 class="card-title">Click here for completed the work</h4>
+                              <div class="media">
+                                <div class="media-body">
+                                  <a href="/work_completed?status=Completed&wa_id={{data3.wa_id}}" class="btn btn-sm btn-dark text-white">Work completed</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {% endif %}
+                        <div class="col-12">
+                          <div class="card card-rounded">
+                            <div class="card-body">
+                              <div class="d-sm-flex justify-content-between align-items-start">
+                                <div>
+                                  <h4 class="card-title card-title-dash">Worker details</h4>
+                                <p class="card-subtitle card-subtitle-dash">Assigned worker</p>
+                                </div>
+                                <div>
+                                </div>
+                              </div>
+                              
+                              <div class="table-responsive  mt-1">
+                                <table class="table select-table">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Worker</th>
+                                        <th>Contact</th>
+                                        <th>Location</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in data2 %}
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>
+                                            <div class="d-flex ">
+                                                <img src="{{i.worker.image}}" alt="">
+                                                <div>
+                                                <h6>{{i.worker.name}}</h6>
+                                                <p class="badge-opacity-success px-4">{{i.worker.service.service_name}}</p>
+                                                </div>
+                                            </div>
+                                            </td>
+                                            <td>
+                                                Email {{i.worker.email}} <br>
+                                                Contact number {{i.worker.contact_number}}
+                                            </td>
+                                            <td>
+                                            <p><b class="p-2">{{i.worker.district.state.state}}</b></p>
+                                            <p><b class="badge badge-opacity-danger">{{i.worker.district.district}}</b></p>
+                                            <h6><b class="badge badge-opacity-warning">{{i.worker.place}}</b></h6>
+                                            </td>
+                                        </tr> 
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+ 
+{% endblock content %}

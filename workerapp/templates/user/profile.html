@@ -1,0 +1,141 @@
+{% extends 'user/index.html' %}
+{% block content %}
+{% load static %}
+
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Profile</h2>
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li>Profile</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Contact Section ======= -->
+    
+
+    <section id="contact" class="contact">
+      <div class="container">
+        <h3>Profile</h3>
+        <div class="row mt-5" data-aos="fade-up">
+          {% if messages %}
+            {% for message in messages %}
+            <h6 class="alert alert-success">{{message}}</h6>       
+            {% endfor %}
+        {% endif %}         
+          <div class="col-lg-6">
+            <form method="post" acction="/profile/" id="myform" class="shadow-lg p-3 bg-white rounded">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-md-12 form-group">
+                   <label for="" class="form-label">Full name</label>
+                  <input type="text" name="name" value="{{data.name}}"  class="form-control" id="name" placeholder="Your Name" required>
+                </div>
+                <div class="col-md-12 form-group mt-3 mt-md-0">
+                    <label for="email" class="form-label">Your Email</label>
+                  <input type="email" class="form-control" value="{{data.email}}"  name="email" id="email" placeholder="Your Email" required>
+                </div>
+                <div class="col-md-12 form-group mt-3 mt-md-0">
+                    <label for="Contact" class="form-label">Contact number</label>
+                  <input type="text" class="form-control" value="{{data.contact_number}}"  name="contact_number" id="Contact" placeholder="Contact number" required>
+                </div>
+                <div class="col-md-12 form-group mt-3 mt-md-0">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea class="form-control" name="address" rows="2" placeholder="Address" required>{{data.address}}</textarea>
+                </div>
+              <div class="mt-2">
+                <button type="submit" class="btn btn-success">Update</button>
+                <a href="/change_password" class="float-end">Change password ?</a>
+            
+            </div>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
+
+
+  <script src="{% static 'Validation/jquery-1.11.1.min.js' %}"></script>
+<script src="{% static 'Validation/jquery_validate.js' %}"></script>
+<script src="{% static 'Validation/additional_validate.js' %}"></script>
+
+<script>
+    (function ($, W, D)
+    {
+    var JQUERY4U = {};
+    JQUERY4U.UTIL =
+    {
+    setupFormValidation: function ()
+    {
+    $.validator.addMethod(
+    "regex",
+    function(value, element, regexp) {
+    var check = false;
+    return this.optional(element) || regexp.test(value);
+    },
+    "Not a valid Input."
+    );
+    
+    //form validation rules
+    $("#myform").validate({
+    ignore: [],
+    rules: {
+                
+        name: {
+                      required: true,
+                      regex : /^[A-Za-z ]+$/,
+                      minlength: 3,
+        
+                    },
+                   
+                    contact_number: {
+                        required: true,
+                        digits:true,
+                           minlength: 10,
+                           maxlength: 10,
+                           regex : /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/
+                    },
+
+                   
+        
+                    email: {
+                     required: true,
+                     regex :  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        
+                    },
+                    
+               
+               
+                
+              },
+              messages: {
+    
+                contact_number: "Please Enter Valid 10 digit Phone Number - Starting from 6, 7 or 8 or 9",
+                
+    },
+    submitHandler: function (form) {
+    form.submit();
+    }
+    });
+    }
+    }
+    //when the dom has loaded setup form validation rules
+    $(D).ready(function ($) {
+    JQUERY4U.UTIL.setupFormValidation();
+    });
+    })(jQuery, window, document);
+    </script>
+
+{% endblock content %}

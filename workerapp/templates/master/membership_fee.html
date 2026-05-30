@@ -1,0 +1,59 @@
+{% extends 'master/index.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="h3 mb-3 border-bottom py-2">Services</div>
+<div class="row">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success">{{message}}</div>       
+  {% endfor %}
+{% endif %}
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-body">
+          <!-- <h4 class="card-title">Default form</h4> -->
+          <p class="card-description">
+           Enter Service details
+          </p>
+          <form class="forms-sample" method="post" action="/membership_fee/">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="membership_fee">Membership fee</label>
+              <input type="number" class="form-control" required name="membership_fee" id="membership_fee" placeholder="Membership fee">
+            </div>
+            {% if data %}
+            <button type="submit" disabled class="btn btn-primary me-2">Submit</button>
+            {% else %}
+            <button type="submit" class="btn btn-primary me-2">Submit</button>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+    {% if data %}
+    <div class="col-md-7">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+                <th>Membership fee</th>
+                <th>#</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in data %}
+            <tr>
+                <td>{{i.membership_fee}}</td>
+                <td><a href="/edit_membership_fee?mf_id={{i.mf_id}}" class="btn btn-sm btn-success">Edit</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+{% endblock content %}

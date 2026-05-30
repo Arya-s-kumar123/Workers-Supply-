@@ -1,0 +1,210 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
+
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Register</h2>
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li>Register</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Contact Section ======= -->
+    
+
+    <section id="contact" class="contact">
+      <div class="container">
+        <h3>Register</h3>
+        <div class="row mt-5 justify-content-center" data-aos="fade-up">
+          {% if messages %}
+            {% for message in messages %}
+            <h6 class="alert alert-success">{{message}}</h6>       
+            {% endfor %}
+        {% endif %}         
+          <div class="col-lg-8">
+            <form method="post" acction="/user_register/" id="myform" class="shadow-lg p-3 bg-white rounded">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-md-6 form-group">
+                   <label for="" class="form-label">Full name</label>
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                </div>
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                    <label for="email" class="form-label">Your Email</label>
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                </div>
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                    <label for="Contact" class="form-label">Contact number</label>
+                  <input type="text" class="form-control" name="contact_number" id="Contact" placeholder="Contact number" required>
+                </div>
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea class="form-control" name="address" rows="2" placeholder="Address" required></textarea>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" name="username" class="form-control" id="username" placeholder="Username" required>
+                    <span id="cb" name="cb"></span>
+                  </div>
+                  <div class="col-md-6 form-group mt-3 mt-md-0">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+                  </div>
+                  <div class="col-md-6 form-group mt-3 mt-md-0"></div>
+                  <div class="col-md-6 form-group mt-3 mt-md-0">
+                    <label for="password" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="cpas" placeholder="Confirm password" required>
+                  </div>
+              </div>
+              <div class="mt-2"><button type="submit" class="btn btn-success">Register</button></div>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
+
+
+  <script src="{% static 'Validation/jquery-1.11.1.min.js' %}"></script>
+<script src="{% static 'Validation/jquery_validate.js' %}"></script>
+<script src="{% static 'Validation/additional_validate.js' %}"></script>
+
+<script>
+    (function ($, W, D)
+    {
+    var JQUERY4U = {};
+    JQUERY4U.UTIL =
+    {
+    setupFormValidation: function ()
+    {
+    $.validator.addMethod(
+    "regex",
+    function(value, element, regexp) {
+    var check = false;
+    return this.optional(element) || regexp.test(value);
+    },
+    "Not a valid Input."
+    );
+    
+    //form validation rules
+    $("#myform").validate({
+    ignore: [],
+    rules: {
+                
+        name: {
+                      required: true,
+                      regex : /^[A-Za-z ]+$/,
+                      minlength: 3,
+        
+                    },
+                   
+                    contact_number: {
+                        required: true,
+                        digits:true,
+                           minlength: 10,
+                           maxlength: 10,
+                           regex : /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/
+                    },
+
+                   
+        
+                    email: {
+                     required: true,
+                     regex :  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        
+                    },
+                    username: {
+                        required: true,
+                        regex : /^[A-Za-z0-9@]+$/,
+                        minlength: 5,
+                        maxlength: 15,
+        
+                    },
+                    password: {
+                        required: true,
+                         regex : /^[A-Za-z0-9@#*]+$/,
+                         minlength: 5,
+                        maxlength: 15,
+        
+                    },
+                    cpas: {
+                        required: true,
+                           regex : /^[A-Za-z0-9@#*]+$/,
+                           minlength: 5,
+                          maxlength: 15,
+                      equalTo: "#password"
+        
+                    },
+                
+               
+               
+                
+              },
+              messages: {
+    
+                phone: "Please Enter Valid 10 digit Phone Number - Starting from 6, 7 or 8 or 9",
+                username: "Please Enter Valid User Name(5-15 digit alphanumeric username",
+                password: "Please Enter Valid Password Name(5-15 digit alphanumeric  password  and @#* also allowed",
+                cpas: "Please Enter Valid Password Name(5-15 digit alphanumeric confirm password and same as above password and @#* also allowed",
+                uname:"User name is not available",
+    },
+    submitHandler: function (form) {
+    form.submit();
+    }
+    });
+    }
+    }
+    //when the dom has loaded setup form validation rules
+    $(D).ready(function ($) {
+    JQUERY4U.UTIL.setupFormValidation();
+    });
+    })(jQuery, window, document);
+    </script>
+
+<script>
+$("#username").keyup(function () {
+    $('#uname').val("");
+   var username = $(this).val();
+   var count = username.length;
+   $('#cb').html("");
+   if(count>4)
+  {
+   $.ajax({
+         url: '/check_username/',
+         data: {
+             'username': username
+         },
+         dataType: 'json',
+         success: function (data) {
+              if (data.username_exists) {
+
+
+                $('#cb').css('color','red');
+                $('#cb').html(data.error);
+
+              }
+              else{
+
+                $('#cb').css('color','green');
+            $('#cb').html(data.success);
+            $('#uname').val(1);
+              }
+         }
+   });
+}
+});
+</script>
+{% endblock content %}

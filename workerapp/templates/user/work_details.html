@@ -1,0 +1,235 @@
+{% extends 'user/index.html' %}
+{% block content %}
+{% load static %}
+
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Work details</h2>
+          <ol>
+            <li><a href="/home">Home</a></li>
+            <li>Work details</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Contact Section ======= -->
+    <section id="portfolio-details" class="portfolio-details">
+        <div class="container" data-aos="fade-up">
+          <div class="row gy-4">
+            {% if messages %}
+            {% for message in messages %}
+            <h6 class="alert alert-success">{{message}}</h6>       
+            {% endfor %}
+        {% endif %}
+        <div class="col-lg-6">
+            <div class="portfolio-info">
+              <h3>WORK DETAILS</h3>
+              <div class="row">
+                <div class="col-12">
+                    <p><strong>Service :</strong> {{data.service.service_name}}</p>
+                </div>
+                <div class="col-12">
+                    <p><strong>Title :</strong> {{data.title}}</p>
+                    <p><strong>Description :</strong> {{data.description}}</p>
+                </div>
+                <div class="col-12">
+                    <p><strong>Location : </strong>{{data.district.state.state}} | {{data.district.district}} | {{data.place}}</p>
+                </div>
+                <div class="col-12">
+                    <p><strong>User details : </strong>{{data.user.name}} | {{data.user.email}} | {{data.user.contact_number}} <br>{{data.user.address}}</p>
+                    
+                </div>
+                <div class="col-7">
+                    {% if data.status == None %}
+                    <div class="alert alert-warning p-1">Work in progress</div>
+                    {% elif data.status == "Completed" %}
+                    <div class="alert alert-success p-1">Work Completed</div>
+                    {% endif %}
+                </div>
+                <div class="col-5">
+                    {% if data.status != "Completed" %}
+                    <form action="/update_work_status/" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="sr_id" value="{{data.sr_id}}">
+                        <label for="status" class="form-label">Work completed ?</label>
+                        <select class="form-control" required name="status" id="status">
+                            <option value="">--Select--</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                        <div class="mt-2"><button type="submit" class="btn btn-success">Submit</button></div>
+                    </form>
+                    {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+            <div class="col-lg-6">
+                <div class="portfolio-info">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Worker</th>
+                                <th>Name</th>
+                                <th>Contact</th>
+                                <th>Service</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in data2 %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>
+                                    <div class="d-flex ">
+                                        <img src="{{i.worker.image}}" height="60" width="70" alt="">
+                                    </div>
+                                    </td>
+                                    <td><b>{{i.worker.name}}</b></td>
+                                    <td>{{i.worker.contact_number}}</td>
+                                    <td>{{i.worker.service.service_name}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+          </div>
+  
+        </div>
+      </section>
+  </main><!-- End #main -->
+
+
+  <script src="{% static 'Validation/jquery-1.11.1.min.js' %}"></script>
+<script src="{% static 'Validation/jquery_validate.js' %}"></script>
+<script src="{% static 'Validation/additional_validate.js' %}"></script>
+
+<script>
+    (function ($, W, D)
+    {
+    var JQUERY4U = {};
+    JQUERY4U.UTIL =
+    {
+    setupFormValidation: function ()
+    {
+    $.validator.addMethod(
+    "regex",
+    function(value, element, regexp) {
+    var check = false;
+    return this.optional(element) || regexp.test(value);
+    },
+    "Not a valid Input."
+    );
+    
+    //form validation rules
+    $("#myform").validate({
+    ignore: [],
+    rules: {
+                
+        name: {
+                      required: true,
+                      regex : /^[A-Za-z ]+$/,
+                      minlength: 3,
+        
+                    },
+                   
+                    contact_number: {
+                        required: true,
+                        digits:true,
+                           minlength: 10,
+                           maxlength: 10,
+                           regex : /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/
+                    },
+
+                   
+        
+                    email: {
+                     required: true,
+                     regex :  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        
+                    },
+                    username: {
+                        required: true,
+                        regex : /^[A-Za-z0-9@]+$/,
+                        minlength: 5,
+                        maxlength: 15,
+        
+                    },
+                    password: {
+                        required: true,
+                         regex : /^[A-Za-z0-9@#*]+$/,
+                         minlength: 5,
+                        maxlength: 15,
+        
+                    },
+                    cpas: {
+                        required: true,
+                           regex : /^[A-Za-z0-9@#*]+$/,
+                           minlength: 5,
+                          maxlength: 15,
+                      equalTo: "#password"
+        
+                    },
+                
+               
+               
+                
+              },
+              messages: {
+    
+                phone: "Please Enter Valid 10 digit Phone Number - Starting from 6, 7 or 8 or 9",
+                username: "Please Enter Valid User Name(5-15 digit alphanumeric username",
+                password: "Please Enter Valid Password Name(5-15 digit alphanumeric  password  and @#* also allowed",
+                cpas: "Please Enter Valid Password Name(5-15 digit alphanumeric confirm password and same as password and @#* also allowed",
+                uname:"User name is not available",
+    },
+    submitHandler: function (form) {
+    form.submit();
+    }
+    });
+    }
+    }
+    //when the dom has loaded setup form validation rules
+    $(D).ready(function ($) {
+    JQUERY4U.UTIL.setupFormValidation();
+    });
+    })(jQuery, window, document);
+    </script>
+
+<script>
+    $(document).ready(function(){
+        $("#State").change(function(){
+        var state_id = $(this).val();
+
+$.ajax({
+
+    url: '/display_district/',
+    data: {
+        'state_id': state_id
+    },
+    dataType: 'json',
+    success: function (data) {
+
+
+        let html_data = '<option value="">--Select--</option>';
+data.forEach(function (data) {
+html_data += `<option value="${data.district_id}">${data.district}</option>`
+});
+$("#district").html(html_data);
+
+    }
+});
+
+        });
+    });
+    </script> 
+{% endblock content %}

@@ -1,0 +1,81 @@
+{% extends 'user/index.html' %}
+{% block content %}
+{% load static %}
+
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Feedback</h2>
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li>Feedback</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Contact Section ======= -->
+    
+
+    <section id="contact" class="contact">
+      <div class="container">
+        <h3>Feedback</h3>
+        <div class="row mt-5" data-aos="fade-up">
+              
+                  <div class="col-lg-12">
+                    {% if data %}
+                      <div class="table-responsive">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                              <th>#</th>
+                              <th>Work</th>
+                              <th>Feedback</th>
+                              <th>Reply</th>
+                          </tr>
+                      </thead>
+                      
+                      <tbody>
+                          
+                          {% for i in data %}
+                          <tr>
+                              <td>{{forloop.counter}}</td>
+                              <td>
+                                {{i.service_request.service.service_name}} <br>
+                                <b>{{i.service_request.title}}</b> <br>
+                                {{i.service_request.description}} <br>
+                                <a href="/work_details?sr_id={{i.service_request_id}}" class="btn btn-sm btn-primary">Details</a>
+                              </td>
+                              <td>
+                                  {{i.feedback}} <br>
+                                  Feedback date : {{i.feedback_date}}
+                              </td>
+                              <td>
+                                  {% if i.reply == None %}
+                                   <div class="alert alert-warning p-2">Waiting for reply</div>
+                                  {% else %}
+                                  {{i.reply}}
+                                  {% endif %}
+                              </td>
+                              
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                      </table>
+                      </div>
+                      {% endif %}    
+                  </div>
+                  
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
+
+{% endblock content %}

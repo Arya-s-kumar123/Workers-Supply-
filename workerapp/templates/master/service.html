@@ -1,0 +1,70 @@
+{% extends 'master/index.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="h3 mb-3 border-bottom py-2">Services</div>
+<div class="row">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success">{{message}}</div>       
+  {% endfor %}
+{% endif %}
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-body">
+          <!-- <h4 class="card-title">Default form</h4> -->
+          <p class="card-description">
+           Enter Service details
+          </p>
+          <form class="forms-sample" method="post" enctype="multipart/form-data" action="/service/">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="service_name">Service name</label>
+              <input type="text" class="form-control" required name="service_name" id="service_name" placeholder="Service name">
+            </div>
+            <div class="form-group">
+              <label for="">Description</label>
+              <textarea name="description" required class="form-control form-control-lg" placeholder="Description"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="image">Image</label>
+              <input type="file" class="form-control" required name="image" id="image">
+            </div>
+            <button type="submit" class="btn btn-primary me-2">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% if data %}
+    <div class="col-md-7">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+                <th>#</th>
+                <th>Service</th>
+                <th>Description</th>
+                <th>#</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in data %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>
+                  <h6 class="py-2">{{i.service_name}}</h6>
+                  <img src="{{i.image}}" class="rounded" alt=""></td>
+                <td>{{i.description}}</td>
+                <td><a href="/edit_service?s_id={{i.s_id}}" class="btn btn-sm btn-success">Edit</a></td>
+                <td><a href="/delete_service?s_id={{i.s_id}}" class="btn btn-sm btn-danger">Delete</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+{% endblock content %}

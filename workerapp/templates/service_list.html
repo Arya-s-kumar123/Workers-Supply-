@@ -1,0 +1,56 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
+
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Service list</h2>
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li>Service list</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Contact Section ======= -->
+
+    <section id="testimonials" class="testimonials section-bg">
+        <div class="container">
+  
+          <div class="row">
+  {% if data %}{% for i in data %}
+            <div class="col-lg-6" data-aos="fade-up">
+              <div class="testimonial-item" style="min-height:150px;">
+                <div class="row">
+                    <div class="col-12">
+                        <img src="{{i.image}}" class="testimonial-img" alt="">
+                        <h3>{{i.service_name}}</h3>
+                        <!-- <h4>Ceo &amp; Founder</h4> -->
+                    </div>
+                    <div class="col-12">
+                        <p style="max-height: 90px;overflow: hidden;">
+                        <i class=""></i>
+                        {{i.description}}
+                        <i class=""></i>
+                        </p>
+                    </div>
+                </div>
+                
+              </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h4>Not found any services</h4>{% endif %}
+          </div>
+        </div>
+      </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
+{% endblock content %}

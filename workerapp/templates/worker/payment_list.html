@@ -1,0 +1,44 @@
+{% extends 'worker/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="h3 mb-3 border-bottom py-2">Membership payments</div>
+<div class="row">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success">{{message}}</div>       
+  {% endfor %}
+{% endif %}
+    {% if data %}
+    <div class="col-md-12">  
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Membership date</th>
+              <th>Validity date</th>
+              <th>Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for i in data %}
+          <tr>
+              <td>{{forloop.counter}}</td>
+              <td>{{i.membership_date}}</td>
+              <td><b class="text-danger">{{i.membership_validity}}</b></td>
+              <td>{{i.amount}}</td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% else %}
+    <div class="col-md-12">
+      <h5>Not found any payments</h5>
+    </div>
+    {% endif %}
+  </div>
+     
+{% endblock content %}

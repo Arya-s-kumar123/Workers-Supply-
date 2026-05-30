@@ -1,0 +1,222 @@
+{% extends 'master/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="h3 mb-3 border-bottom py-2">Service request</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="home-tab">
+          <div class="tab-content tab-content-basic">
+            <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
+              <div class="row">
+                <div class="col-lg-12 d-flex flex-column">
+                  <div class="row flex-grow">
+                    <div class="col-md-4 col-lg-4 grid-margin">
+                      <div class="card card-rounded">
+                        <div class="card-body card-rounded">
+                          <h4 class="card-title  card-title-dash">Service request</h4>
+                          <div class="list align-items-center border-bottom py-2">
+                            <div class="wrapper w-100">
+                              <p class="mb-2 font-weight-medium">
+                                Request date
+                              </p>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="mdi mdi-calendar text-muted me-1"></i>
+                                  <p class="mb-0 text-small text-muted">{{data.requested_date}}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="list align-items-center border-bottom py-2">
+                            <div class="wrapper w-100">
+                              <p class="mb-2 font-weight-medium">
+                               Service
+                              </p>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="ti-settings text-muted me-1"></i>
+                                  <p class="mb-0 text-small text-muted badge badge-opacity-success px-4">{{data.service.service_name}}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="list align-items-center border-bottom py-2">
+                            <div class="wrapper w-100">
+                              <p class="mb-2 font-weight-medium">
+                                User details
+                              </p>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="mdi mdi-account text-muted me-1"></i>
+                                  <p class="mb-0 text-small text-muted">{{data.user.name}} | {{data.user.email}} | {{data.user.contact_number}}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="list align-items-center border-bottom py-2">
+                            <div class="wrapper w-100">
+                              <p class="mb-2 font-weight-medium">
+                                Location
+                              </p>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="mdi mdi-calendar text-muted me-1"></i>
+                                  <p class="mb-0 text-small text-muted">{{data.district.state.state}} - <b class="badge badge-opacity-danger">{{data.district.district}}</b> - <b class="badge badge-opacity-warning">{{data.place}}</b></p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="list align-items-center border-bottom py-2">
+                            <div class="wrapper w-100">
+                              <p class="mb-2 font-weight-medium">
+                                Request
+                              </p>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <p class="mb-0 text-small text-muted"><b>{{data.title}}</b> <br> {{data.description}}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-8 grid-margin">
+                      <div class="card card-rounded">
+                        <div class="card-body">
+                          
+                          <div class="d-sm-flex justify-content-between align-items-start">
+                            <div>
+                              <h4 class="card-title card-title-dash">Search worker</h4>
+                             <p class="card-subtitle card-subtitle-dash">Assign worker</p>
+                            </div>
+                            <div>
+                              <div class="row">
+                              <div class="col-3 form-group px-2">
+                                <select class="form-control" required name="state_id" id="State">
+                                  <option value="">--Select state--</option>
+                                  {% if state %} 
+                                    {% for i in state %}
+                                    <option value="{{i.state_id}}">{{i.state}}</option>
+                                    {% endfor %}
+                                  {% endif %}
+                                </select>
+                              </div>
+                              <div class="col-3 form-group px-2">
+                                <select class="form-control" required id="district" name="district_id">
+                                  <option value="">--Select district--</option>
+                                </select>
+                              </div>
+                              <div class="col-3 form-group px-2">
+                                <input type="text" class="form-control" placeholder="Enter place" id="place" name="place">
+                              </div>
+                              <div class="col-3 form-group px-2">
+                                <select class="js-example-basic-multiple w-100" placeholder="Service" multiple="multiple" required name="service_id" id="service_id">
+                                  <option value="">--Select--</option>
+                                  {% if service %} 
+                                    {% for i in service %}
+                                    <option value="{{i.s_id}}">{{i.service_name}}</option>
+                                    {% endfor %}
+                                  {% endif %}
+                                </select>
+                                
+                                </div>
+                            </div>
+                            </div>
+                          </div>
+                          <form action="/assign_work/" method="post" onsubmit="return validateForm()" id="myform">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{data.sr_id}}" name="service_request_id">
+                          <div class="table-responsive  mt-1" id="tb">
+                            
+                              
+                          </div>
+                        </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+     
+  <script src="{% static 'Validation/jquery-1.11.1.min.js' %}"></script>
+  <script src="{% static 'Validation/jquery_validate.js' %}"></script>
+  <script src="{% static 'Validation/additional_validate.js' %}"></script>
+
+  <script>
+    $(document).ready(function(){
+        $("#State").change(function(){
+        var state_id = $(this).val();
+
+$.ajax({
+
+    url: '/display_district/',
+    data: {
+        'state_id': state_id
+    },
+    dataType: 'json',
+    success: function (data) {
+
+
+        let html_data = '<option value="">--Select--</option>';
+data.forEach(function (data) {
+html_data += `<option value="${data.district_id}">${data.district}</option>`
+});
+$("#district").html(html_data);
+
+    }
+});
+
+        });
+    });
+    </script>
+
+
+<script>
+  $(document).ready(function () {
+    $("#service_id").change(function () {
+          var service_id = $(this).val();
+          var state_id = $("#State").val();
+          var district_id = $("#district").val();
+          var place = $("#place").val();
+          service_id = service_id.join(",");
+          console.log(service_id);
+          $.ajax({
+
+                url: '/search_worker/',
+                data: {
+                  'state_id': state_id,
+                  'service_id': service_id,
+                  'district_id': district_id,
+                  'place': place
+                },
+                
+                success: function (data) {
+
+                  $("#tb").html(data)
+
+                  }
+          });
+        });
+       });</script>
+
+
+<script>
+function validateForm() {
+    if (document.querySelectorAll('input[name="worker_id"]:checked').length === 0){
+     v=document.getElementById("msg")
+        v.innerHTML="Please select a worker";
+        function out(){
+    v=document.getElementById("msg").innerHTML="";
+    }
+    setTimeout(out,3000);
+    return false;
+} }
+</script>
+{% endblock content %}

@@ -1,0 +1,81 @@
+{% extends 'master/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="h3 mb-3 border-bottom py-2">Feedback</div>
+<div class="row">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success">{{message}}</div>       
+  {% endfor %}
+{% endif %}
+    {% if data %}
+    <div class="col-md-12">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>User</th>
+                    <th>Work</th>
+                    <th>Feedback</th>
+                    <th>Reply</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for i in data %}
+              <tr>
+                <td>{{forloop.counter}}</td>
+                <td>
+                    Name :{{i.user.name}}<br>
+                    Email  :{{i.user.email}} <br>
+                    Contact number :{{i.user.contact_number}}
+                </td>
+                <td>
+                  {{i.service_request.service.service_name}} <br>
+                  <b>{{i.service_request.title}}</b> <br>
+                  {{i.service_request.description}} <br>
+                  <a href="/work_details?sr_id={{i.service_request_id}}" class="btn btn-sm btn-primary">Details</a>
+                </td>
+                    <td>
+                        {{i.feedback}} <br>
+                       Feedback date : {{i.feedback_date}} 
+                    </td>
+                    <td>
+                        {% if i.reply == None %}
+                        <div id="bdiv"><button onclick="disp()" class="btn btn-primary">Reply</button></div>
+                        <div id="fdiv" style="display: none;">
+                         <form method="post" action="/reply/">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{i.f_id}}" name="f_id">
+                        <textarea class="form-control form-control-lg" rows="3" name="reply" placeholder="Reply"></textarea>
+                        <br>
+                        <input type="submit" style="float: right;" value="Submit" class="btn btn-sm btn-primary">
+                        </form>
+                         </div>
+                        {% else %}
+                        {{i.reply}}
+                        {% endif %}
+                    </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-md-12">
+      <h5>Not found any feedback</h5>
+    </div>
+    {% endif %}
+  </div>
+  <script>
+    function disp(){
+        var x = document.getElementById("fdiv");
+        var y = document.getElementById("bdiv");
+
+        y.style.display = "none";
+        x.style.display = "block";
+    }
+</script>    
+{% endblock content %}

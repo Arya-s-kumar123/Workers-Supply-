@@ -1,0 +1,74 @@
+{% extends 'master/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="h3 mb-3 border-bottom py-2">Worker List</div>
+<div class="row">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success">{{message}}</div>       
+  {% endfor %}
+{% endif %}
+    {% if data %}
+    <div class="col-md-12">  
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+                <th>#</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Contact details</th>
+                <th>Service</th>
+                <th>Proof</th>
+                <th>Approval status</th>
+                <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in data %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td><img src="{{i.image}}" style="height: 100px; width:100px;" alt=""></td>
+                <td>{{i.name}}</td>
+                <td>
+                    State : {{i.district.state.state}} <br>
+                    District : {{i.district.district}} <br>
+                    Palce : {{i.place}} <br>
+                    Email : {{i.email}} <br>
+                    Contact number : {{i.contact_number}} <br>
+                    Address : {{i.address}}
+                </td>
+                <td>
+                    {{i.service.service_name}} <br>
+                    Experience : {{i.work_experience}} Year <br>
+                    Student : {{i.student}} <br>
+                    {% if i.student == 'Yes' %}
+                    Working time : <b class="text-danger">{{i.work_time}}</b>
+                    {% endif %}
+                </td>
+                <td><a href="{{i.proof}}" target="_blank">View</a></td>
+                <td>
+                    {% if i.log.approval_status == 'Approved' %}
+                    <div class="p-2" style="background-color: rgb(166, 240, 176);">{{i.log.approval_status}}</div>
+                    {% elif i.log.approval_status == 'Rejected' %}
+                    <div class="p-2" style="background-color: rgb(247, 153, 153);">{{i.log.approval_status}}</div>
+                    {% endif %}
+                </td>
+                <td>
+                  <a href="/delete_worker?log_id={{i.log_id}}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% else %}
+    <div class="col-md-12">
+      <h5>Not found any worker</h5>
+    </div>
+    {% endif %}
+  </div>
+     
+{% endblock content %}

@@ -1,0 +1,65 @@
+{% extends 'master/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="h3 mb-3 border-bottom py-2">Worker request</div>
+<div class="row">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success">{{message}}</div>       
+  {% endfor %}
+{% endif %}
+    {% if data %}
+    <div class="col-md-12">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                  <th>#</th>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Contact details</th>
+                  <th>Service</th>
+                  <th>Proof</th>
+                  <th colspan="2">#</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in data %}
+              <tr>
+                  <td>{{forloop.counter}}</td>
+                  <td><img src="{{i.image}}" style="height: 100px; width:100px;" alt=""></td>
+                  <td>{{i.name}}</td>
+                  <td>
+                      State : {{i.district.state.state}} <br>
+                      District : {{i.district.district}} <br>
+                      Palce : {{i.place}} <br>
+                      Email : {{i.email}} <br>
+                      Contact number : {{i.contact_number}} <br>
+                      Address : {{i.address}}
+                  </td>
+                  <td>
+                      {{i.service.service_name}} <br>
+                      Experience : {{i.work_experience}} Year <br>
+                      Student : {{i.student}} <br>
+                      {% if i.student == 'Yes' %}
+                      Working time : <b class="text-danger">{{i.work_time}}</b>
+                      {% endif %}
+                  </td>
+                  <td><a href="{{i.proof}}" target="_blank">View</a></td>
+                  <td><a href="/worker_approval?log_id={{i.log_id}}&approval_status=Approved" class="badge badge-success">Approve</a></td>
+                  <td><a href="/worker_approval?log_id={{i.log_id}}&approval_status=Rejected" class="badge badge-danger">Reject</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-md-12">
+      <h5>Not found any new request</h5>
+    </div>
+    {% endif %}
+  </div>
+     
+{% endblock content %}
